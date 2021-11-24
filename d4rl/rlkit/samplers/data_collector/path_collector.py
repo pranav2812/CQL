@@ -40,24 +40,25 @@ class MdpPathCollector(PathCollector):
     ):
         paths = []
         num_steps_collected = 0
-        while num_steps_collected < num_steps:
-            max_path_length_this_loop = min(  # Do not go over num_steps
-                max_path_length,
-                num_steps - num_steps_collected,
-            )
+        # while num_steps_collected < num_steps:
+        #     max_path_length_this_loop = min(  # Do not go over num_steps
+        #         max_path_length,
+        #         num_steps - num_steps_collected,
+        #     )
+        for _ in range(10):
             path = rollout(
                 self._env,
                 self._policy,
-                max_path_length=max_path_length_this_loop,
+                max_path_length=max_path_length,
             )
-            path_len = len(path['actions'])
-            if (
-                    path_len != max_path_length
-                    and not path['terminals'][-1]
-                    and discard_incomplete_paths
-            ):
-                break
-            num_steps_collected += path_len
+            # path_len = len(path['actions'])
+            # if (
+            #         path_len != max_path_length
+            #         and not path['terminals'][-1]
+            #         and discard_incomplete_paths
+            # ):
+            #     break
+            # num_steps_collected += path_len
 
             ## Used to sparsify reward
             if self._sparse_reward:

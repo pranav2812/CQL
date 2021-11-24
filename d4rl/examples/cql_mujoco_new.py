@@ -8,6 +8,7 @@ from rlkit.torch.sac.cql import CQLTrainer
 from rlkit.torch.networks import FlattenMlp
 from rlkit.torch.torch_rl_algorithm import TorchBatchRLAlgorithm
 
+from datetime import datetime
 import argparse, os
 import numpy as np
 
@@ -109,6 +110,9 @@ def enable_gpus(gpu_str):
     return
 
 if __name__ == "__main__":
+    now = datetime.now()
+    dt_string = now.strftime("%d_%m_%Y-%H:%M:%S")
+    
     # noinspection PyTypeChecker
     variant = dict(
         algorithm="CQL",
@@ -120,9 +124,10 @@ if __name__ == "__main__":
         env_name='Hopper-v2',
         sparse_reward=False,
         algorithm_kwargs=dict(
-            num_epochs=3000,
-            num_eval_steps_per_epoch=1000,
-            num_trains_per_train_loop=1000,  
+            num_epochs=200,  # 3000
+            num_eval_steps_per_epoch=10000,  # 1000
+            num_trains_per_train_loop=5000,  # 1000
+            num_train_loops_per_epoch=1,
             num_expl_steps_per_train_loop=1000,
             min_num_steps_before_training=1000,
             max_path_length=1000,
@@ -186,7 +191,11 @@ if __name__ == "__main__":
     variant['env_name'] = args.env
     variant['seed'] = args.seed
 
-    rnd = np.random.randint(0, 1000000)
-    setup_logger(os.path.join('CQL_offline_mujoco_runs', str(rnd)), variant=variant, base_log_dir='/nfs/kun1/users/aviralkumar/random_expert_CQL_runs')
+    print('='*50)
+    print('Seed: ',args.seed)
+    print('='*50)
+    # rnd = np.random.randint(0, 1000000)
+    setup_logger(os.path.join('CQL_offline_mujoco_runs', dt_string+'_'+str(args.seed)),
+     variant=variant, base_log_dir='./result_logs/', snapshot_mode="all")
     ptu.set_gpu_mode(True)
     experiment(variant)

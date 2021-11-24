@@ -12,7 +12,7 @@ from torch import autograd
 
 class CQLTrainer(TorchTrainer):
     def __init__(
-            self, 
+            self,
             env,
             policy,
             qf1,

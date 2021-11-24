@@ -9,11 +9,28 @@ import numpy as np
 
 import rlkit.pythonplusplus as ppp
 
+# For normalized score in eval list
+import d4rl
 
-def get_generic_path_information(paths, stat_prefix=''):
+def get_normalized_score(env_name, score):
+    ref_min_score = d4rl.infos.REF_MIN_SCORE[env_name]
+    ref_max_score = d4rl.infos.REF_MAX_SCORE[env_name]
+    return (score - ref_min_score) / (ref_max_score - ref_min_score)
+
+def get_generic_path_information(paths, stat_prefix='', isThisEval=False):
     """
     Get an OrderedDict with a bunch of statistic names and values.
     """
+
+    # I have 10 paths for evaulation now, variable for exploration
+    # I need d4rl_score, avg_reward, episode_d4rl_set, episode_return_set
+
+    if isThisEval:
+        # make modifications for resulting values
+        # avg_reward = sum(returns)/10
+        # d4rl_score = 
+        pass
+
     statistics = OrderedDict()
     returns = [sum(path["rewards"]) for path in paths]
 
@@ -32,34 +49,6 @@ def get_generic_path_information(paths, stat_prefix=''):
     ))
     statistics['Num Paths'] = len(paths)
     statistics[stat_prefix + 'Average Returns'] = get_average_returns(paths)
-
-    return statistics
-
-    for info_key in ['env_infos', 'agent_infos']:
-        if info_key in paths[0]:
-            all_env_infos = [
-                ppp.list_of_dicts__to__dict_of_lists(p[info_key])
-                for p in paths
-            ]
-            for k in all_env_infos[0].keys():
-                final_ks = np.array([info[k][-1] for info in all_env_infos])
-                first_ks = np.array([info[k][0] for info in all_env_infos])
-                all_ks = np.concatenate([info[k] for info in all_env_infos])
-                statistics.update(create_stats_ordered_dict(
-                    stat_prefix + k,
-                    final_ks,
-                    stat_prefix='{}/final/'.format(info_key),
-                ))
-                statistics.update(create_stats_ordered_dict(
-                    stat_prefix + k,
-                    first_ks,
-                    stat_prefix='{}/initial/'.format(info_key),
-                ))
-                statistics.update(create_stats_ordered_dict(
-                    stat_prefix + k,
-                    all_ks,
-                    stat_prefix='{}/'.format(info_key),
-                ))
 
     return statistics
 

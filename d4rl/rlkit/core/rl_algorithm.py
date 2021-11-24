@@ -127,7 +127,7 @@ class BaseRLAlgorithm(object, metaclass=abc.ABCMeta):
                 prefix='evaluation/',
             )
         logger.record_dict(
-            eval_util.get_generic_path_information(eval_paths),
+            eval_util.get_generic_path_information(eval_paths, isThisEval=True),
             prefix="evaluation/",
         )
 
