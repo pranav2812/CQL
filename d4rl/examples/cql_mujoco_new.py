@@ -1,3 +1,5 @@
+import torch
+import random
 import rlkit.torch.pytorch_util as ptu
 from rlkit.data_management.env_replay_buffer import EnvReplayBuffer
 from rlkit.envs.wrappers import NormalizedBoxEnv
@@ -25,10 +27,21 @@ def load_hdf5(dataset, replay_buffer):
     print ('Number of terminals on: ', replay_buffer._terminals.sum())
     replay_buffer._top = replay_buffer._size
 
+def set_seed(env, seed):
+    env.seed(seed)
+    env.action_space.seed(seed)
+    torch.manual_seed(seed)
+    random.seed(seed)
+    np.random.seed(seed)
+
 def experiment(variant):
     eval_env = gym.make(variant['env_name'])
     expl_env = eval_env
     
+    # Setting seed
+    eval_env = set_seed(env=eval_env, seed=variant['seed'])
+    expl_env = set_seed(env=expl_env, seed=variant['seed'])
+
     obs_dim = expl_env.observation_space.low.size
     action_dim = eval_env.action_space.low.size
 
