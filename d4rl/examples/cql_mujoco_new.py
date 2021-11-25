@@ -139,7 +139,7 @@ if __name__ == "__main__":
         sparse_reward=False,
         algorithm_kwargs=dict(
             num_epochs=200,  # 3000
-            num_eval_steps_per_epoch=10000,  # 1000
+            num_eval_steps_per_epoch=1000,  # 1000
             num_trains_per_train_loop=5000,  # 1000
             num_train_loops_per_epoch=1,
             num_expl_steps_per_train_loop=1000,
