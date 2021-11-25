@@ -121,13 +121,15 @@ class BaseRLAlgorithm(object, metaclass=abc.ABCMeta):
             prefix='evaluation/',
         )
         eval_paths = self.eval_data_collector.get_epoch_paths()
+        env_name = self.eval_data_collector.get_env_name()
+        env_seed = self.eval_data_collector.get_env_seed()
         if hasattr(self.eval_env, 'get_diagnostics'):
             logger.record_dict(
                 self.eval_env.get_diagnostics(eval_paths),
                 prefix='evaluation/',
             )
         logger.record_dict(
-            eval_util.get_generic_path_information(eval_paths, isThisEval=True),
+            eval_util.get_generic_path_information(eval_paths, isThisEval=True, envName=env_name, envSeed=env_seed),
             prefix="evaluation/",
         )
 

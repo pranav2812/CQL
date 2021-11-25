@@ -14,6 +14,7 @@ class MdpPathCollector(PathCollector):
             render=False,
             sparse_reward=False,
             render_kwargs=None,
+            seed=0,
     ):
         if render_kwargs is None:
             render_kwargs = {}
@@ -27,6 +28,7 @@ class MdpPathCollector(PathCollector):
         self._num_steps_total = 0
         self._num_paths_total = 0
         self._sparse_reward = sparse_reward
+        self._seed = seed
 
     def update_policy(self, new_policy):
         self._policy = new_policy
@@ -73,6 +75,12 @@ class MdpPathCollector(PathCollector):
 
     def get_epoch_paths(self):
         return self._epoch_paths
+
+    def get_env_name(self):
+        return self._env.spec.__repr__()[8:][:-1]
+    
+    def get_env_seed(self):
+        return self._seed
 
     def end_epoch(self, epoch):
         self._epoch_paths = deque(maxlen=self._max_num_epoch_paths_saved)

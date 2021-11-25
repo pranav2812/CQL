@@ -62,6 +62,7 @@ def experiment(variant):
     eval_path_collector = MdpPathCollector(
         eval_env,
         eval_policy,
+        seed=variant['seed']
     )
     expl_path_collector = CustomMDPPathCollector(
         eval_env,

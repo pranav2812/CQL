@@ -15,6 +15,13 @@ class DataCollector(object, metaclass=abc.ABCMeta):
     def get_epoch_paths(self):
         pass
 
+    @abc.abstractmethod
+    def get_env_name(self):
+        pass
+
+    @abc.abstractmethod
+    def get_env_seed(self):
+        pass
 
 class PathCollector(DataCollector, metaclass=abc.ABCMeta):
     @abc.abstractmethod
